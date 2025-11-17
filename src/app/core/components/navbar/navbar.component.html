@@ -1,0 +1,62 @@
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="nav-top">
+    <div class="left">
+      <a routerLink="/" class="logo">Etsy</a>
+
+      <div class="dropdown">
+        <button class="categories-btn" (click)="toggleDropdown()">
+          <i class="fa fa-bars"></i>
+          Categories
+        </button>
+
+        <div class="dropdown-menu" *ngIf="isDropdownOpen">
+          <a href="#">Accessories</a>
+          <a href="#">Clothes</a>
+          <a href="#">Books</a>
+          <a routerLink="/shoes">Shoes</a>
+          <a routerLink="/bags">Bags</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <input type="text" placeholder="Search for anything" />
+      <button><i class="fa fa-search"></i></button>
+    </div>
+
+<div class="right">
+  <a routerLink="/login" class="signin">Sign in</a>
+
+  <div class="icon-wrapper" title="Favorites">
+    <button class="icon-btn">
+      <i class="fa fa-heart"></i>
+    </button>
+  </div>
+
+  <div class="icon-wrapper" title="Purchases">
+    <button class="icon-btn">
+      <i class="fa fa-clipboard-list"></i>
+    </button>
+  </div>
+
+  <div class="icon-wrapper" title="Cart">
+    <button class="icon-btn">
+      <i class="fa fa-shopping-cart"></i>
+    </button>
+  </div>
+</div>
+
+  </div>
+
+  <div class="nav-bottom">
+    <a href="#">Accessories</a>
+    <a href="#">Clothes</a>
+    <a href="#">Books</a>
+    <a routerLink="/shoes">Shoes</a>
+    <a routerLink="/bags">Bags</a>
+    <a routerLink="/register">Registry</a>
+
+  </div>
+
+
+</nav>

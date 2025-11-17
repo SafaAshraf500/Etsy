@@ -1,0 +1,22 @@
+
+<nav class="breadcrumb">
+<a routerLink="/home">Home > </a>
+<a routerLink="/shoes"> Shoes</a>
+
+</nav>
+
+<!-- Title Bar -->
+ <div class="title-bar">
+  <h1>Shoes</h1>
+</div>
+
+<div class="shoes-container">
+  <div class="shoe-card" *ngFor="let item of visibleShoes">
+    <img [src]="item.img" [alt]="item.title" />
+    <p>{{ item.title }}</p>
+  </div>
+</div>
+
+<button class="toggle-btn" (click)="toggleShow()">
+  {{ showAll ? "Show less" : "Show more" }}
+</button>

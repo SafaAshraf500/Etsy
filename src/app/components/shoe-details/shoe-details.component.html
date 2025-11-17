@@ -1,0 +1,25 @@
+<div class="details-container" *ngIf="product">
+
+  <!-- LEFT SIDE: MAIN IMAGE -->
+  <div class="left-section">
+    <img class="main-img" [src]="product.imageUrl" [alt]="product.name" />
+  </div>
+
+  <!-- RIGHT SIDE: INFO -->
+  <div class="right-section">
+
+    <h1 class="title">{{ product.name }}</h1>
+
+    <p class="price">$ {{ product.price }}</p>
+
+    <p class="desc">{{ product.description }}</p>
+
+    <button class="add-btn">Add to cart</button>
+
+  </div>
+
+</div>
+
+<div class="loading" *ngIf="!product">
+  Loading product...
+</div>

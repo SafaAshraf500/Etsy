@@ -1,0 +1,135 @@
+
+<div class="sliders-wrapper">
+  <!-- Slider 1 -->
+  <div class="products-slider">
+    <h6 class="category-title">{{ sliderTitles[0] }}</h6>
+    <div class="slides-container">
+      <div class="slide" *ngFor="let product of products1">
+        <div class="product-card">
+          <button class="like-btn">♡</button>
+          <img [src]="product.image" alt="product" class="product-img">
+          <div class="price-overlay">
+            <span class="current-price">${{ product.price }}</span>
+            <span class="old-price">${{ product.oldPrice }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="prev" (click)="prevSlide(0)">&#10094;</button>
+    <button class="next" (click)="nextSlide(0)">&#10095;</button>
+  </div>
+
+  <!-- Slider 2 -->
+  <div class="products-slider">
+    <h6 class="category-title">{{ sliderTitles[1] }}</h6>
+    <div class="slides-container">
+      <div class="slide" *ngFor="let product of products2">
+        <div class="product-card">
+          <button class="like-btn">♡</button>
+          <img [src]="product.image" alt="product" class="product-img">
+          <div class="price-overlay">
+            <span class="current-price">${{ product.price }}</span>
+            <span class="old-price">${{ product.oldPrice }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="prev" (click)="prevSlide(1)">&#10094;</button>
+    <button class="next" (click)="nextSlide(1)">&#10095;</button>
+  </div>
+
+  <!-- Slider 3 -->
+  <div class="products-slider">
+    <h6 class="category-title">{{ sliderTitles[2] }}</h6>
+    <div class="slides-container">
+      <div class="slide" *ngFor="let product of products3">
+        <div class="product-card">
+          <button class="like-btn">♡</button>
+          <img [src]="product.image" alt="product" class="product-img">
+          <div class="price-overlay">
+            <span class="current-price">${{ product.price }}</span>
+            <span class="old-price">${{ product.oldPrice }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="prev" (click)="prevSlide(2)">&#10094;</button>
+    <button class="next" (click)="nextSlide(2)">&#10095;</button>
+  </div>
+
+  <!-- Slider 4 -->
+  <div class="products-slider">
+    <h6 class="category-title">{{ sliderTitles[3] }}</h6>
+    <div class="slides-container">
+      <div class="slide" *ngFor="let product of products4">
+        <div class="product-card">
+          <button class="like-btn">♡</button>
+          <img [src]="product.image" alt="product" class="product-img">
+          <div class="price-overlay">
+            <span class="current-price">${{ product.price }}</span>
+            <span class="old-price">${{ product.oldPrice }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="prev" (click)="prevSlide(3)">&#10094;</button>
+    <button class="next" (click)="nextSlide(3)">&#10095;</button>
+  </div>
+
+  <!-- Slider 5 -->
+  <div class="products-slider">
+    <h6 class="category-title">{{ sliderTitles[4] }}</h6>
+    <div class="slides-container">
+      <div class="slide" *ngFor="let product of products5">
+        <div class="product-card">
+          <button class="like-btn">♡</button>
+          <img [src]="product.image" alt="product" class="product-img">
+          <div class="price-overlay">
+            <span class="current-price">${{ product.price }}</span>
+            <span class="old-price">${{ product.oldPrice }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="prev" (click)="prevSlide(4)">&#10094;</button>
+    <button class="next" (click)="nextSlide(4)">&#10095;</button>
+  </div>
+
+  <!-- Slider 6 -->
+  <div class="products-slider">
+    <h6 class="category-title">{{ sliderTitles[5] }}</h6>
+    <div class="slides-container">
+      <div class="slide" *ngFor="let product of products6">
+        <div class="product-card">
+          <button class="like-btn">♡</button>
+          <img [src]="product.image" alt="product" class="product-img">
+          <div class="price-overlay">
+            <span class="current-price">${{ product.price }}</span>
+            <span class="old-price">${{ product.oldPrice }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="prev" (click)="prevSlide(5)">&#10094;</button>
+    <button class="next" (click)="nextSlide(5)">&#10095;</button>
+  </div>
+
+  <!-- Slider 7 -->
+  <div class="products-slider">
+    <h6 class="category-title">{{ sliderTitles[6] }}</h6>
+    <div class="slides-container">
+      <div class="slide" *ngFor="let product of products7">
+        <div class="product-card">
+          <button class="like-btn">♡</button>
+          <img [src]="product.image" alt="product" class="product-img">
+          <div class="price-overlay">
+            <span class="current-price">${{ product.price }}</span>
+            <span class="old-price">${{ product.oldPrice }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="prev" (click)="prevSlide(6)">&#10094;</button>
+    <button class="next" (click)="nextSlide(6)">&#10095;</button>
+  </div>
+</div>

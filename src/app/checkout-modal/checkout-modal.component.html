@@ -1,0 +1,302 @@
+<!-- ===== checkout-modal.component.html ===== -->
+<div class="modal-overlay" *ngIf="show" (click)="closeModal()">
+  <div class="modal-container" (click)="stopPropagation($event)">
+
+    <!-- Close Button -->
+    <button class="close-btn" (click)="closeModal()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+      <div class="step" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+        <div class="step-circle">
+          <span *ngIf="currentStep <= 1">1</span>
+          <svg *ngIf="currentStep > 1" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </div>
+        <span class="step-label">Shipping</span>
+      </div>
+
+      <div class="step-line" [class.completed]="currentStep > 1"></div>
+
+      <div class="step" [class.active]="currentStep === 2" [class.completed]="currentStep > 2">
+        <div class="step-circle">
+          <span *ngIf="currentStep <= 2">2</span>
+          <svg *ngIf="currentStep > 2" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </div>
+        <span class="step-label">Payment</span>
+      </div>
+
+      <div class="step-line" [class.completed]="currentStep > 2"></div>
+
+      <div class="step" [class.active]="currentStep === 3">
+        <div class="step-circle">3</div>
+        <span class="step-label">Review</span>
+      </div>
+    </div>
+
+    <!-- ============ Step 1: Shipping Address ============ -->
+<div class="checkout-modal" *ngIf="show" (click)="closeModal()">
+  <div class="checkout-container" (click)="stopPropagation($event)">
+
+    <!-- ================= STEP 1: SHIPPING ================= -->
+    <div class="step-content" *ngIf="currentStep === 1">
+      <h2 class="modal-title">Enter an address</h2>
+
+      <form class="checkout-form">
+        <!-- Country -->
+        <div class="form-group">
+          <label class="form-label">Country <span class="required">*</span></label>
+          <select [(ngModel)]="shippingAddress.country" name="country" class="form-select"
+                  [ngClass]="{'error-border': submittedShipping && !shippingAddress.country}">
+            <option value="">Select country</option>
+            <option>Egypt</option>
+            <option>United States</option>
+            <option>United Kingdom</option>
+            <option>Saudi Arabia</option>
+            <option>UAE</option>
+          </select>
+          <div class="error-msg" *ngIf="submittedShipping && !shippingAddress.country">
+            Please select a country
+          </div>
+        </div>
+
+        <!-- Full Name -->
+        <div class="form-group">
+          <label class="form-label">Full name <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="shippingAddress.fullName" name="fullName" class="form-input"
+                 [ngClass]="{'error-border': submittedShipping && !shippingAddress.fullName.trim()}" />
+          <div class="error-msg" *ngIf="submittedShipping && !shippingAddress.fullName.trim()">
+            Please enter your full name
+          </div>
+        </div>
+
+        <!-- Street Address -->
+        <div class="form-group">
+          <label class="form-label">Street address <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="shippingAddress.streetAddress" name="streetAddress" class="form-input"
+                 [ngClass]="{'error-border': submittedShipping && !shippingAddress.streetAddress.trim()}" />
+          <div class="error-msg" *ngIf="submittedShipping && !shippingAddress.streetAddress.trim()">
+            Please enter your street address
+          </div>
+        </div>
+
+        <!-- Apartment -->
+        <div class="form-group">
+          <label class="form-label">Apt / Suite / Other (optional)</label>
+          <input type="text" [(ngModel)]="shippingAddress.apartment" name="apartment" class="form-input" />
+        </div>
+
+        <!-- City -->
+        <div class="form-group">
+          <label class="form-label">City <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="shippingAddress.city" name="city" class="form-input"
+                 [ngClass]="{'error-border': submittedShipping && !shippingAddress.city.trim()}" />
+          <div class="error-msg" *ngIf="submittedShipping && !shippingAddress.city.trim()">
+            Please enter your city
+          </div>
+        </div>
+
+        <!-- Province + Postal -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Province (optional)</label>
+            <select [(ngModel)]="shippingAddress.province" name="province" class="form-select">
+              <option value="">Select province</option>
+              <option>Cairo</option>
+              <option>Giza</option>
+              <option>Alexandria</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Postal code (optional)</label>
+            <input type="text" [(ngModel)]="shippingAddress.postalCode" name="postalCode" class="form-input" />
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label class="form-label">Phone number <span class="required">*</span></label>
+          <input type="tel" [(ngModel)]="shippingAddress.phoneNumber" name="phoneNumber" class="form-input"
+                 [ngClass]="{'error-border': submittedShipping && !shippingAddress.phoneNumber.trim()}" />
+          <div class="error-msg" *ngIf="submittedShipping && !shippingAddress.phoneNumber.trim()">
+            Please enter your phone number
+          </div>
+        </div>
+
+        <div class="privacy-notice">
+          We use your phone number to facilitate delivery.
+        </div>
+
+        <button type="button" class="submit-btn" (click)="continueToPayment()">
+          Continue to Payment
+        </button>
+      </form>
+    </div>
+
+    <!-- ================= STEP 2: PAYMENT ================= -->
+    <div class="step-content" *ngIf="currentStep === 2">
+      <h2 class="modal-title">Choose a payment method</h2>
+
+      <form class="checkout-form">
+        <div class="payment-card-section">
+          <div class="title-row">
+            <h3 class="section-title">Add a card</h3>
+            <div class="card-icons">
+              <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/color/visa.svg" alt="Visa" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard" />
+              <img src="https://play-lh.googleusercontent.com/0X8rP74H3vWk-CyqrzhUJBl0eU4w-C7Ef6f4ola7uw_QEJm5DBRaVRYNa-tRskbVfVoO" alt="Amex" />
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfje6lyP7DO-FPD4Y5bPvVwJE0hH6UhWKZGg&s" alt="Discover" />
+            </div>
+          </div>
+
+          <!-- Card Number -->
+          <div class="form-group">
+            <label class="form-label">Card number <span class="required">*</span></label>
+            <div class="input-with-icon"
+                 [ngClass]="{'error-border': submittedPayment && !paymentData.cardNumber.trim()}">
+              <svg class="input-icon" width="20" height="20" stroke="currentColor">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              <input type="text" [(ngModel)]="paymentData.cardNumber" name="cardNumber" class="form-input card-input"
+                     placeholder="1234 5678 9012 3456" maxlength="19" (input)="formatCardNumber()" />
+              <svg class="lock-icon" width="20" height="20" stroke="currentColor">
+                <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                <path d="M7 11V7a5 5 0 0110 0v4"></path>
+              </svg>
+            </div>
+            <div class="error-msg" *ngIf="submittedPayment && !paymentData.cardNumber.trim()">
+              Please enter a card number
+            </div>
+          </div>
+
+          <!-- Expiration + CVV -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Expiration date (MM/YY) <span class="required">*</span></label>
+              <input type="text" [(ngModel)]="paymentData.expirationDate" name="expirationDate" class="form-input"
+                     placeholder="MM/YY" maxlength="5" (input)="formatExpirationDate()"
+                     [ngClass]="{'error-border': submittedPayment && !paymentData.expirationDate.trim()}" />
+              <div class="error-msg" *ngIf="submittedPayment && !paymentData.expirationDate.trim()">
+                Please enter expiration date
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Security code <span class="required">*</span></label>
+              <div class="input-with-icon"
+                   [ngClass]="{'error-border': submittedPayment && !paymentData.securityCode.trim()}">
+                <input type="text" [(ngModel)]="paymentData.securityCode" name="securityCode" class="form-input"
+                       placeholder="CVV" maxlength="4" />
+              </div>
+              <div class="error-msg" *ngIf="submittedPayment && !paymentData.securityCode.trim()">
+                Please enter your security code
+              </div>
+            </div>
+          </div>
+
+          <!-- Name on card -->
+          <div class="form-group">
+            <label class="form-label">Name on card <span class="required">*</span></label>
+            <input type="text" [(ngModel)]="paymentData.nameOnCard" name="nameOnCard" class="form-input"
+                   [ngClass]="{'error-border': submittedPayment && !paymentData.nameOnCard.trim()}" />
+            <div class="error-msg" *ngIf="submittedPayment && !paymentData.nameOnCard.trim()">
+              Please enter the name on card
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="back-btn" (click)="backToShipping()">Back</button>
+          <button type="button" class="submit-btn" (click)="continueToReview()">Review your order</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+    <!-- ============ Step 3: Review ============ -->
+    <div class="step-content" *ngIf="currentStep === 3">
+      <h2 class="modal-title">Review your order</h2>
+
+      <div class="review-content">
+        <!-- Shipping Info -->
+        <div class="review-section">
+          <div class="section-header">
+            <h3>Shipping address</h3>
+            <button class="edit-btn" (click)="backToShipping()">Edit</button>
+          </div>
+          <div class="info-box">
+            <p><strong>{{ shippingAddress.fullName }}</strong></p>
+            <p>{{ shippingAddress.streetAddress }}</p>
+            <p *ngIf="shippingAddress.apartment">{{ shippingAddress.apartment }}</p>
+            <p>{{ shippingAddress.city }}, {{ shippingAddress.province }}</p>
+            <p>{{ shippingAddress.country }} {{ shippingAddress.postalCode }}</p>
+            <p>{{ shippingAddress.countryCode }} {{ shippingAddress.phoneNumber }}</p>
+          </div>
+        </div>
+
+        <!-- Payment Info -->
+        <div class="review-section">
+          <div class="section-header">
+            <h3>Payment method</h3>
+            <button class="edit-btn" (click)="backToPayment()">Edit</button>
+          </div>
+          <div class="info-box">
+            <div class="payment-info">
+              <svg width="40" height="25" viewBox="0 0 40 25" fill="none">
+                <rect width="40" height="25" rx="3" fill="#1A1F71" />
+                <text x="5" y="17" fill="white" font-size="10" font-weight="bold">VISA</text>
+              </svg>
+              <div>
+                <p><strong>{{ getMaskedCardNumber() }}</strong></p>
+                <p class="text-sm">Expires {{ paymentData.expirationDate }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="review-section">
+          <h3>Items ({{ cartItems.length }})</h3>
+          <div class="items-list">
+            <div class="item-row" *ngFor="let item of cartItems">
+              <img [src]="item.image" [alt]="item.productName" class="item-image">
+              <div class="item-details">
+                <p class="item-name">{{ item.productName }}</p>
+                <p class="item-shop">{{ item.shop }}</p>
+                <p class="item-quantity">Qty: {{ item.quantity }}</p>
+              </div>
+              <div class="item-price">
+                ${{ (item.price * item.quantity).toFixed(2) }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Total -->
+        <div class="review-section">
+          <div class="total-row">
+            <span>Total</span>
+            <span class="total-amount">${{ cartTotal.toFixed(2) }}</span>
+          </div>
+        </div>
+
+        <button type="button" class="submit-btn complete-btn" (click)="completeOrder()">
+          Place your order
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

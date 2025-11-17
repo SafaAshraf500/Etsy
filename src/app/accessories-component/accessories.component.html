@@ -1,0 +1,143 @@
+<div class="accessories-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Accessories</h1>
+    <p class="page-subtitle">Scarves, hats, and hair accessories that tie it all together</p>
+  </div>
+
+  <!-- Categories Section -->
+  <section class="categories-section">
+    <div class="categories-grid">
+      <div class="category-card" *ngFor="let category of categories.slice(0, showMoreCategories ? categories.length : 6)">
+        <div class="category-image">
+          <img [src]="category.image" [alt]="category.name">
+        </div>
+        <h3 class="category-name">{{ category.name }}</h3>
+      </div>
+    </div>
+    
+    <button class="show-more-btn" (click)="toggleCategories()" *ngIf="categories.length > 6">
+      {{ showMoreCategories ? 'Show less' : 'Show more (11)' }}
+    </button>
+  </section>
+
+  <!-- Filters and Products Section -->
+  <section class="products-section">
+    <!-- Filters Bar -->
+    <div class="filters-bar">
+      <button class="all-filters-btn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        All Filters
+      </button>
+
+      <div class="filters-right">
+        <span class="items-count">{{ totalItems }}+ items with ads</span>
+        <div class="sort-dropdown">
+          <label for="sort">Sort by:</label>
+          <select id="sort" [(ngModel)]="sortBy" (change)="onSortChange(sortBy)">
+            <option value="relevancy">Relevancy</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="reviews">Top Customer Reviews</option>
+            <option value="newest">Newest</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+   
+
+    <!-- Products Grid -->
+    <div class="products-grid">
+      <div class="product-card" *ngFor="let product of products">
+        <!-- Product Image -->
+        <div class="product-image">
+          <a [routerLink]="['/productdetails', product.id]">
+
+          <img [src]="product.image" [alt]="product.title">
+          <button class="favorite-btn" aria-label="Add to favorites">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 17.5l-1.45-1.32C4.4 12.36 2 10.28 2 7.5 2 5.5 3.5 4 5.5 4c1.54 0 3.04.99 3.57 2.36h1.87C11.46 4.99 12.96 4 14.5 4c2 0 3.5 1.5 3.5 3.5 0 2.78-2.4 4.86-6.55 8.68L10 17.5z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </button>
+          </a>
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info">
+          <span class="ad-badge" *ngIf="product.adBySeller">Ad by Etsy seller</span>
+          <h3 class="product-title">{{ product.title }}</h3>
+
+          <div class="product-rating">
+            <div class="stars">
+              <svg *ngFor="let star of [1,2,3,4,5]" width="12" height="12" viewBox="0 0 12 12" 
+                   [class.filled]="star <= product.rating">
+                <path d="M6 0l1.545 4.755h5.005l-4.05 2.945 1.545 4.755L6 9.51 2.955 12.455l1.545-4.755-4.05-2.945h5.005z" 
+                      fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="rating-count">({{ product.reviews | number }})</span>
+            <span class="star-seller" *ngIf="product.isStarSeller">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="#FFC107">
+                <path d="M7 0l1.545 4.755h5.005l-4.05 2.945 1.545 4.755L7 9.51 2.955 12.455l1.545-4.755-4.05-2.945h5.005z"/>
+              </svg>
+              Star Seller
+            </span>
+          </div>
+
+          <div class="product-price">
+            <span class="currency">USD</span>
+            <span class="current-price">{{ product.price | number:'1.2-2' }}</span>
+            <span class="original-price" *ngIf="product.originalPrice">
+              USD {{ product.originalPrice | number:'1.2-2' }}
+            </span>
+            <span class="discount" *ngIf="product.discount">
+              ({{ product.discount }}% off)
+            </span>
+          </div>
+
+          <span class="free-shipping" *ngIf="product.freeShipping">FREE shipping</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination-title">
+  There's so much more for you to discover
+</div>
+    <!-- Pagination - تحت المنتجات على الشمال -->
+<div class="pagination-bottom">
+  <div class="pagination">
+
+    <button 
+      class="page-btn arrow-btn" 
+      [disabled]="currentPage === 1"
+      (click)="previousPage()"
+      aria-label="Previous page">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <!-- الأرقام -->
+    <button 
+      *ngFor="let page of pages"
+      class="page-btn" 
+      [class.active]="page === currentPage"
+      (click)="goToPage(page)">
+      {{ page }}
+    </button>
+    
+    <!-- السهم اليمين (Next) -->
+    <button 
+      class="page-btn arrow-btn" 
+      [disabled]="currentPage === totalPages"
+      (click)="nextPage()"
+      aria-label="Next page">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>

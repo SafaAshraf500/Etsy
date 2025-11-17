@@ -1,0 +1,38 @@
+<div class="login-page">
+  <div class="login-box">
+    <div class="logo">
+      <img src="https://www.etsy.com/assets/dist/images/etsylogo.20240215.svg" alt="Etsy Logo" />
+    </div>
+
+    <h1>Sign in</h1>
+    <p>Continue to your Etsy account.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" formControlName="email" placeholder="Email" />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" placeholder="Password" />
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid">Sign in</button>
+    </form>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <button class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon" />
+      Continue with Google
+    </button>
+
+    <p class="register-link">
+      New to Etsy? <a routerLink="/register">Create your account</a>
+    </p>
+  </div>
+</div>
+

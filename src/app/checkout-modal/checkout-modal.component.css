@@ -1,0 +1,518 @@
+/* ===== checkout-modal.component.css ===== */
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+/* Modal Container - الـ scroll هنا */
+.modal-container {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto; /* ← الـ scroll على الـ container كله */
+  position: relative;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  background: #f0f0f0;
+}
+
+/* Progress Steps */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.step.active .step-circle {
+  background: #222;
+  color: white;
+}
+
+.step.completed .step-circle {
+  background: #4CAF50;
+  color: white;
+}
+
+.step-label {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.step.active .step-label {
+  color: #222;
+  font-weight: 600;
+}
+
+.step-line {
+  width: 60px;
+  height: 2px;
+  background: #e0e0e0;
+  margin: 0 10px;
+  transition: background 0.3s;
+}
+
+.step-line.completed {
+  background: #4CAF50;
+}
+
+/* Step Content */
+.step-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Title */
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #222;
+}
+
+/* Form Styles */
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+}
+
+.required {
+  color: #e74c3c;
+}
+
+/* ===== Error Input Style ===== */
+.input-error {
+  border: 2px solid #d93025 !important;
+  background-color: #fde7e9 !important;
+}
+
+/* ===== Error message style ===== */
+.error-message {
+  color: #d93025;
+  font-size: 13px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Add red error icon */
+.error-message::before {
+  content: "⚠️";
+  font-size: 14px;
+}
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-icons {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.card-icons img {
+  width: 30px;
+  height: 25px;
+  padding: 4px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.form-input,
+.form-select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #222;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* Privacy Notice */
+.privacy-notice {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.submit-btn {
+  background: #222;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background: #000;
+}
+
+.back-btn {
+  background: white;
+  color: #222;
+  padding: 14px;
+  border: 1px solid #222;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: #f5f5f5;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.form-actions .back-btn,
+.form-actions .submit-btn {
+  flex: 1;
+}
+
+/* Payment Section */
+.payment-card-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.card-icons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.card-icon {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  color: #999;
+}
+
+.lock-icon {
+  position: absolute;
+  right: 12px;
+  color: #999;
+}
+
+.info-icon {
+  position: absolute;
+  right: 12px;
+  color: #999;
+  cursor: help;
+}
+
+.card-input {
+  padding-left: 45px;
+  padding-right: 45px;
+}
+
+.checkbox-group {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-top: 4px;
+}
+
+.address-preview {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+/* Review Section */
+.review-content {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.review-section {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 20px;
+}
+
+.review-section:last-child {
+  border-bottom: none;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  color: #2e5c9a;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.edit-btn:hover {
+  color: #1a3a6b;
+}
+
+.info-box {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.info-box p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.payment-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.text-sm {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Items List */
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.item-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.item-shop {
+  font-size: 12px;
+  color: #666;
+  margin: 0 0 4px;
+}
+
+.item-quantity {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.item-price {
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+}
+
+/* Total */
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.total-amount {
+  color: #222;
+  font-size: 24px;
+}
+
+.complete-btn {
+  margin-top: 20px;
+  background: #4CAF50;
+}
+
+.complete-btn:hover {
+  background: #45a049;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .modal-container {
+    padding: 20px;
+    max-height: 95vh;
+  }
+
+  .progress-steps {
+    padding: 0;
+  }
+
+  .step-line {
+    width: 40px;
+  }
+
+  .step-label {
+    font-size: 11px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+}

@@ -1,0 +1,217 @@
+<div class="cart-container">
+  <app-checkout-modal
+    [show]="showCheckoutModal"
+    [cartTotal]="getTotal()"
+    [cartItems]="cartItems"
+    (close)="closeCheckoutModal()"
+    (orderComplete)="onOrderComplete($event)">
+  </app-checkout-modal>
+
+  <div class="cart-content">
+    <!-- Cart Items Section -->
+    <div class="cart-items-section">
+      <h1 class="cart-title">Your cart</h1>
+
+      <!-- Empty State -->
+      <div class="empty-cart" *ngIf="cartItems.length === 0">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+        </svg>
+        <h2>Your cart is empty</h2>
+        <p>Start shopping to add items to your cart</p>
+        <button class="shop-now-btn" (click)="goToShop()">
+          Continue Shopping
+        </button>
+      </div>
+      
+      <!-- Cart Items -->
+      <div class="cart-item-card" *ngFor="let item of cartItems; let i = index">
+        <div class="shop-header">
+          <div class="shop-info">
+            <div class="shop-icon" [style.background-color]="item.shopColor">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 2L7 7H4C2.9 7 2 7.9 2 9v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2h-3l-2-5H9z"/>
+              </svg>
+            </div>
+            <span class="shop-name">{{ item.shop }}</span>
+            <div class="shop-rating">
+              <svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span>{{ item.rating }}</span>
+              <span class="reviews-count">({{ item.reviews }})</span>
+            </div>
+          </div>
+          <button class="more-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="5" r="1"/>
+              <circle cx="12" cy="12" r="1"/>
+              <circle cx="12" cy="19" r="1"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="discount-banner" *ngIf="item.discount">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+            <line x1="7" y1="7" x2="7.01" y2="7"/>
+          </svg>
+          <span>{{ item.discount }}</span>
+        </div>
+
+        <div class="product-details">
+          <div class="product-image-wrapper">
+            <img 
+              [src]="item.image || 'https://via.placeholder.com/120x120/E0E0E0/666666?text=No+Image'" 
+              [alt]="item.productName" 
+              class="product-image"
+              (error)="handleImageError($event)">
+            <span class="discount-badge" *ngIf="item.discountPercentage">{{ item.discountPercentage }}</span>
+          </div>
+          
+          <div class="product-info">
+            <h3 class="product-name">{{ item.productName }}</h3>
+            
+            <div class="price-section">
+              <span class="current-price">USD {{ item.price.toFixed(2) }}</span>
+              <span class="original-price" *ngIf="item.originalPrice">USD {{ item.originalPrice.toFixed(2) }}</span>
+            </div>
+
+            <div class="digital-info" *ngIf="item.isDigital">
+              <div class="instant-download" *ngIf="item.instantDownload">
+                <span class="download-icon">⚡</span>
+                <span>Instant Download</span>
+              </div>
+              <div class="files-info" *ngIf="item.filesIncluded">{{ item.filesIncluded }}</div>
+              <div class="sale-notice" *ngIf="item.saleEndsSoon">Sale for a limited time</div>
+            </div>
+
+            <div class="personalization-alert" *ngIf="item.needsPersonalization">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Add personalization to this item</span>
+            </div>
+
+            <!-- Quantity Controls -->
+            <div class="quantity-controls">
+              <button class="quantity-btn" (click)="decreaseQuantity(item.id)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </button>
+              <span class="quantity-value">{{ item.quantity }}</span>
+              <button class="quantity-btn" (click)="increaseQuantity(item.id)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="item-actions">
+              <button class="action-btn" (click)="saveForLater(item.id)">Save for later</button>
+              <button class="action-btn" (click)="removeItem(item.id)">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Summary Section -->
+    <div class="payment-summary" *ngIf="cartItems.length > 0">
+      <div class="payment-card">
+        <h2 class="payment-title">How you'll pay</h2>
+        
+        <div class="payment-methods">
+          <div class="payment-option">
+            <input type="radio" name="payment" id="card" [checked]="selectedPayment === 'card'" 
+                   (change)="selectPayment('card')">
+            <label for="card">
+              <div class="payment-icons">
+                <span class="payment-icon">VISA</span>
+                <span class="payment-icon">MC</span>
+                <span class="payment-icon">AMEX</span>
+                <span class="payment-icon">DISC</span>
+              </div>
+            </label>
+          </div>
+          
+          <div class="payment-option">
+            <input type="radio" name="payment" id="paypal" [checked]="selectedPayment === 'paypal'"
+                   (change)="selectPayment('paypal')">
+            <label for="paypal">
+              <span class="payment-icon-large">PayPal</span>
+            </label>
+          </div>
+          
+          <div class="payment-option">
+            <input type="radio" name="payment" id="gpay" [checked]="selectedPayment === 'gpay'"
+                   (change)="selectPayment('gpay')">
+            <label for="gpay">
+              <span class="payment-icon-large">G Pay</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="price-summary">
+          <div class="price-row">
+            <span>Item(s) total</span>
+            <span>USD {{ getSubtotal().toFixed(2) }}</span>
+          </div>
+          <div class="protection-notice">
+            <span>🛡️ You're covered with <span class="link">Etsy Purchase Protection</span></span>
+          </div>
+          <div class="price-row discount">
+            <span>Shop discount</span>
+            <span>-USD {{ discount.toFixed(2) }}</span>
+          </div>
+          <div class="price-row">
+            <span>Subtotal</span>
+            <span>USD {{ (getSubtotal() - discount).toFixed(2) }}</span>
+          </div>
+          <div class="price-row shipping">
+            <span>Shipping</span>
+            <span class="shipping-location">(To Egypt)</span>
+          </div>
+        </div>
+
+        <div class="total-section">
+          <div class="total-row">
+            <span class="total-label">Total ({{ getTotalItems() }} items)</span>
+            <span class="total-amount">USD {{ getTotal().toFixed(2) }}</span>
+          </div>
+          <div class="vat-notice">VAT included</div>
+        </div>
+
+        <div class="gift-option">
+          <input type="checkbox" id="gift" [(ngModel)]="markAsGift">
+          <label for="gift">
+            Mark order as a gift
+            <span class="learn-more">Learn more</span>
+          </label>
+        </div>
+
+        <button class="checkout-btn" (click)="proceedToCheckout()">Proceed to checkout</button>
+
+        <button class="coupon-btn" (click)="applyCoupon()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+            <line x1="7" y1="7" x2="7.01" y2="7"/>
+          </svg>
+          Apply coupon code
+        </button>
+
+        <div class="tax-notice">
+          Local taxes included (where applicable)
+          <br>
+          * Learn more about additional taxes, duties, and fees that may apply
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

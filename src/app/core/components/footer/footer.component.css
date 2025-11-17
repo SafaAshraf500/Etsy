@@ -1,0 +1,306 @@
+footer {
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  width: 100%;
+}
+
+/* Subscribe Section */
+.footer-subscribe {
+  background-color: #D7EFFB;
+  text-align: center;
+  padding: 40px 20px;
+  color: #222;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.subscribe-box {
+  margin-top: 15px;
+}
+
+.subscribe-box input {
+  padding: 12px 20px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  width: 260px;
+  outline: none;
+  font-size: 14px;
+}
+
+.subscribe-box button {
+  background: #fff;
+  color: #222;
+  border: 1px solid #000;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-weight: 700;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.subscribe-box button:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* Renewable Section */
+.footer-renewable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5a78f0; 
+  color: white;
+  padding: 25px 0;
+  gap: 8px;
+}
+
+
+
+.etsy {
+  display: inline-block; 
+  border-bottom: 1px dashed #D7EFFB;
+  font-weight: 500;
+  font-size: 25px;
+  margin: 0;
+  padding-bottom: 2px;
+  cursor: pointer;
+}
+
+.etsy:hover {
+  color: #D7EFFB;
+}
+
+
+/* Main Footer */
+.footer-main {
+  display: flex;
+  justify-content: space-between;
+  background-color: #1F2338;
+  padding: 60px 100px;
+  flex-wrap: wrap;
+}
+
+
+/* ===== Etsy Logo in Footer ===== */
+.etsy-footer-logo {
+  background-color: #f1641e; /* اللون البرتقالي الرسمي بتاع Etsy */
+  color: white;
+  font-family: "Georgia", serif;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 8px 18px;
+  display: inline-block;
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.etsy-footer-logo:hover {
+  transform: scale(1.05);
+}
+
+/* زرار Download the Etsy App */
+.download-btn {
+  background-color: #4f6df5;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.download-btn:hover {
+  background-color: #3e56d5;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-around;
+  flex: 1;
+  gap: 40px;
+}
+
+.footer-links div {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-links h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.footer-links a {
+  color: #dcdcdc;
+  font-size: 14px;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  scale: 5px;
+  color: #f1641e;
+}
+
+.footer-links .social-icons {
+  display: flex !important; 
+  flex-direction: row !important;
+  gap: 20px;
+  margin-top: 15px;
+  justify-content: flex-start; 
+}
+
+
+.social-icons a {
+  color: white;
+  font-size: 20px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #d7effb;
+  transform: scale(1.2);
+}
+
+/* Bottom Footer */
+.footer-bottom {
+  background-color: #222222;
+  color: #ccc;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 100px;
+  flex-wrap: wrap;
+}
+
+.footer-bottom a {
+  color: #ccc;
+  margin: 0 5px;
+  text-decoration: none;
+}
+
+.footer-bottom a:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+.footer-locale {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+@media (max-width: 1024px) {
+  .footer-main {
+    padding: 40px 40px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .footer-left {
+    margin-bottom: 30px;
+  }
+
+  .footer-links div {
+    align-items: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+    padding: 20px 20px;
+  }
+
+  .footer-bottom a {
+    display: inline-block;
+    margin: 3px 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-subscribe {
+    padding: 30px 15px;
+    font-size: 14px;
+  }
+
+  .subscribe-box {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .subscribe-box input {
+    width: 80%;
+    margin-bottom: 10px;
+  }
+
+  .subscribe-box button {
+    margin-left: 0;
+    width: 50%;
+  }
+
+  .footer-main {
+    padding: 40px 20px;
+  }
+
+  .footer-links h4 {
+    font-size: 15px;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+  }
+
+  .footer-renewable {
+    font-size: 13px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-main {
+    padding: 30px 10px;
+  }
+
+  .download-btn {
+    width: 80%;
+  }
+
+  .footer-links {
+    gap: 25px;
+  }
+
+  .footer-bottom {
+    font-size: 12px;
+  }
+
+  .footer-locale {
+    justify-content: center;
+  }
+}

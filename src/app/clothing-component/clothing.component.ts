@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FavoritesService } from '../services/favorites.service';
 import { Router, RouterModule } from '@angular/router';
@@ -29,23 +29,34 @@ interface Product {
 @Component({
   selector: 'app-clothing',
   standalone: true,
-  imports: [FormsModule, CommonModule,RouterModule ],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './clothing.component.html',
   styleUrls: ['./clothing.component.css']
 })
 export class ClothingComponent implements OnInit {
+
+   @ViewChild('dropdown', { static: false }) dropdownRef!: ElementRef;
+
   sortBy: string = 'relevancy';
   showMoreCategories: boolean = false;
-  totalItems: number = 1000;
   isDropdownOpen: boolean = false;
-  showSortDropdown: boolean = false;
-  Math = Math;
-  favorites: any[] = [];
-  // Pagination
+
+  products: Product[] = [];
+  searchQuery: string = '';
+  filteredProducts: Product[] = [];
+
   currentPage: number = 1;
   itemsPerPage: number = 8;
   totalPages: number = 3;
   pages: number[] = [];
+
+  sortOptions = [
+    { value: 'relevancy', label: 'Relevancy' },
+    { value: 'price-low', label: 'Lowest Price' },
+    { value: 'price-high', label: 'Highest Price' },
+    { value: 'reviews', label: 'Top Customer Reviews' },
+    { value: 'newest', label: 'Most Recent' }
+  ];
 
   categories: Category[] = [
     {
@@ -85,7 +96,6 @@ export class ClothingComponent implements OnInit {
     }
   ];
 
-  // كل المنتجات
   allProducts: Product[] = [
     {
       id: 1,
@@ -200,9 +210,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 9,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Leather Jacket Premium Quality',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -214,9 +224,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 10,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Cotton T-Shirt Comfortable Fit',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -228,9 +238,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 11,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Denim Jeans Classic Style',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -242,9 +252,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 12,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Summer Dress Floral Pattern',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -256,9 +266,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 13,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Wool Sweater Winter Collection',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -269,10 +279,10 @@ export class ClothingComponent implements OnInit {
       isStarSeller: true,
       freeShipping: false,
       adBySeller: false
-    }
-    ,    {
+    },
+    {
       id: 14,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Sports Shorts Athletic Wear',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -284,9 +294,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 15,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Formal Shirt Business Attire',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -298,9 +308,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 16,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Hoodie Comfortable Casual',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -311,9 +321,10 @@ export class ClothingComponent implements OnInit {
       isStarSeller: true,
       freeShipping: false,
       adBySeller: false
-    },    {
+    },
+    {
       id: 17,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Blazer Professional Look',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -325,9 +336,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 18,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Tracksuit Sports Collection',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -339,9 +350,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 19,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Cardigan Cozy Knit',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -353,9 +364,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 20,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Tank Top Summer Essential',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -367,9 +378,9 @@ export class ClothingComponent implements OnInit {
       freeShipping: false,
       adBySeller: false
     },
-        {
+    {
       id: 21,
-      title: 'Personalized Reading Socks • "Shhh I\'m Reading" Book Lover Gift',
+      title: 'Polo Shirt Classic Design',
       price: 11.37,
       originalPrice: 15.16,
       discount: 25,
@@ -382,39 +393,31 @@ export class ClothingComponent implements OnInit {
       adBySeller: false
     }
   ];
-   constructor(public favoritesService: FavoritesService) {}
 
-  onHeartClick(product: any, event: Event) {
-    event.stopPropagation();
-    this.favoritesService.toggleFavorite(product);
-  }
-
-  // المنتجات اللي هتظهر في الصفحة الحالية
-  products: Product[] = [];
-
-  sortOptions = [
-    { value: 'relevancy', label: 'Relevancy' },
-    { value: 'price-low', label: 'Lowest Price' },
-    { value: 'price-high', label: 'Highest Price' },
-    { value: 'reviews', label: 'Top Customer Reviews' },
-    { value: 'newest', label: 'Most Recent' }
-  ];
+  constructor(
+    private favoritesService: FavoritesService,
+    private router: Router,
+    private eRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
+    this.filteredProducts = [...this.allProducts];
     this.calculateTotalPages();
     this.loadProducts();
   }
 
+  // تحديث - استخدام filteredProducts مش allProducts
   calculateTotalPages(): void {
-    this.totalPages = Math.ceil(this.allProducts.length / this.itemsPerPage);
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.itemsPerPage);
     this.pages = Array.from({length: this.totalPages}, (_, i) => i + 1);
   }
+
 
   loadProducts(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    this.products = this.allProducts.slice(startIndex, endIndex);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.products = this.filteredProducts.slice(startIndex, endIndex);
+
   }
 
   goToPage(page: number): void {
@@ -438,20 +441,54 @@ export class ClothingComponent implements OnInit {
     }
   }
 
-  toggleSortDropdown(): void {
-    this.showSortDropdown = !this.showSortDropdown;
+// ✅ الطريقة الصحيحة للتحقق من النقر خارج العنصر
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: MouseEvent): void {
+    // تحقق من أن dropdownRef موجود وأن النقرة خارج العنصر
+    if (this.dropdownRef && 
+        this.dropdownRef.nativeElement && 
+        !this.dropdownRef.nativeElement.contains(event.target as Node)) {
+      this.isDropdownOpen = false;
+    }
   }
 
-  selectSort(value: string): void {
+  toggleDropdown(event: Event): void {
+    event.stopPropagation(); // منع انتشار الحدث
+    this.isDropdownOpen = !this.isDropdownOpen;
+    console.log('Dropdown state:', this.isDropdownOpen); // للتأكد من التغيير
+  }
+
+  selectSort(value: string, event: Event): void {
+    event.stopPropagation();
     this.sortBy = value;
-    this.showSortDropdown = false;
+    this.isDropdownOpen = false;
     this.sortProducts(value);
   }
 
-  getSortLabel(value: string): string {
-    const option = this.sortOptions.find(opt => opt.value === value);
-    return option ? option.label : 'Relevancy';
+  getSortLabel(): string {
+    const opt = this.sortOptions.find(o => o.value === this.sortBy);
+    return opt ? opt.label : 'Relevancy';
   }
+ onSearchChange(): void {
+    const query = this.searchQuery.toLowerCase().trim();
+    if (query) {
+      this.filteredProducts = this.allProducts.filter(product => 
+        product.title.toLowerCase().includes(query) ||
+        product.seller.toLowerCase().includes(query)
+      );
+    } else {
+      this.filteredProducts = [...this.allProducts];
+    }
+    this.currentPage = 1;
+    this.calculateTotalPages();
+    this.loadProducts();
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.onSearchChange();
+  }
+
 
   toggleCategories(): void {
     this.showMoreCategories = !this.showMoreCategories;
@@ -464,26 +501,41 @@ export class ClothingComponent implements OnInit {
   sortProducts(sortBy: string): void {
     switch(sortBy) {
       case 'price-low':
-        this.allProducts.sort((a, b) => a.price - b.price);
+        this.filteredProducts.sort((a, b) => a.price - b.price);
         break;
       case 'price-high':
-        this.allProducts.sort((a, b) => b.price - a.price);
+        this.filteredProducts.sort((a, b) => b.price - a.price);
         break;
       case 'reviews':
-        this.allProducts.sort((a, b) => b.reviews - a.reviews);
+        this.filteredProducts.sort((a, b) => b.reviews - a.reviews);
+        break;
+      case 'newest':
+        this.filteredProducts.sort((a, b) => b.id - a.id);
         break;
       default:
+        // Relevancy - no sorting
         break;
     }
     this.loadProducts();
   }
 
-  @HostListener('document:click', ['$event'])
-  clickOutside(event: any): void {
-    const target = event.target;
-    const clickedInside = target.closest('.custom-select');
-    if (!clickedInside) {
-      this.showSortDropdown = false;
+  addToFavorites(product: Product, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const isFav = this.favoritesService.isFavorite(product.id);
+    if (isFav) {
+      this.favoritesService.removeFromFavorites(product.id);
+    } else {
+      this.favoritesService.addToFavorites(product);
     }
+  }
+
+  isFavorite(productId: number): boolean {
+    return this.favoritesService.isFavorite(productId);
+  }
+
+  goToFavorites(): void {
+    this.router.navigate(['/favorites']);
   }
 }

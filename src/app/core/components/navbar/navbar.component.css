@@ -193,20 +193,21 @@
 .dropdown-menu a:hover {
   background-color: #f5f5f5;
 }
+
+.icon-wrapper {
+  position: relative;
+}
+
 .cart-badge {
   position: absolute;
   top: -5px;
   right: -5px;
   background-color: red;
   color: white;
-  font-size: 12px;
-  padding: 2px 6px;
+  font-size: 11px;
+  padding: 2px 5px;
   border-radius: 50%;
 }
-.icon-wrapper {
-  position: relative;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;

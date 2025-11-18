@@ -1,70 +1,102 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-export interface Product {
+export interface FavoriteItem {
   id: number;
   title: string;
-  image: string;
   price: number;
-  originalPrice?: number;
+  image: string;
+  seller?: string;
   rating?: number;
   reviews?: number;
-  shopName?: string;
-  fastShipping?: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class FavoritesService {
-  favorites: Product[] = [];
-  private favoritesSubject = new BehaviorSubject<any[]>([]);
-favorites$ = this.favoritesSubject.asObservable();
+  private favoritesSubject = new BehaviorSubject<FavoriteItem[]>([]);
+  public favorites$: Observable<FavoriteItem[]> = this.favoritesSubject.asObservable();
+
   constructor() {
     this.loadFavorites();
   }
 
+  // تحميل المفضلة من localStorage
   private loadFavorites(): void {
     const saved = localStorage.getItem('favorites');
     if (saved) {
-      this.favorites = JSON.parse(saved);
+      this.favoritesSubject.next(JSON.parse(saved));
     }
   }
 
+  // حفظ المفضلة في localStorage
   private saveFavorites(): void {
-    localStorage.setItem('favorites', JSON.stringify(this.favorites));
+    localStorage.setItem('favorites', JSON.stringify(this.favoritesSubject.value));
   }
 
-  addToFavorites(product: Product): void {
-    if (!this.favorites.find(p => p.id === product.id)) {
-      this.favorites.push(product);
+  // إضافة للمفضلة
+  addToFavorites(product: any): boolean {
+    const currentFavorites = this.favoritesSubject.value;
+    const exists = currentFavorites.find(item => item.id === product.id);
+
+    if (!exists) {
+      const favoriteItem: FavoriteItem = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        seller: product.seller,
+        rating: product.rating,
+        reviews: product.reviews
+      };
+
+      currentFavorites.push(favoriteItem);
+      this.favoritesSubject.next([...currentFavorites]);
       this.saveFavorites();
+      return true; // تمت الإضافة
     }
+
+    return false; // موجود بالفعل
   }
 
+  // حذف من المفضلة
   removeFromFavorites(productId: number): void {
-    this.favorites = this.favorites.filter(p => p.id !== productId);
+    const currentFavorites = this.favoritesSubject.value.filter(
+      item => item.id !== productId
+    );
+    this.favoritesSubject.next(currentFavorites);
     this.saveFavorites();
   }
 
-  toggleFavorite(product: Product): void {
+  // التحقق من وجود منتج في المفضلة
+  isFavorite(productId: number): boolean {
+    return this.favoritesSubject.value.some(item => item.id === productId);
+  }
+
+  // جلب جميع المفضلة
+  getFavorites(): FavoriteItem[] {
+    return this.favoritesSubject.value;
+  }
+
+  // عدد المنتجات في المفضلة
+  getFavoritesCount(): number {
+    return this.favoritesSubject.value.length;
+  }
+
+  // مسح كل المفضلة
+  clearFavorites(): void {
+    this.favoritesSubject.next([]);
+    localStorage.removeItem('favorites');
+  }
+
+  // Toggle - إضافة أو حذف
+  toggleFavorite(product: any): boolean {
     if (this.isFavorite(product.id)) {
       this.removeFromFavorites(product.id);
+      return false; // تم الحذف
     } else {
-      this.addToFavorites(product);
+      return this.addToFavorites(product); // تمت الإضافة
     }
-  }
-
-  isFavorite(productId: number): boolean {
-    return this.favorites.some(p => p.id === productId);
-  }
-
-  getFavorites(): Product[] {
-    return this.favorites;
-  }
-
-  clearFavorites(): void {
-    this.favorites = [];
-    localStorage.removeItem('favorites');
   }
 }

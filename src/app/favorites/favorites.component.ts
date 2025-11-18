@@ -1,60 +1,48 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { FavoritesService } from '../services/favorites.service';
-import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
-
+import { Router, RouterLink } from '@angular/router';
+import { FavoritesService, FavoriteItem } from '../services/favorites.service';
+import { CartService } from '../services/cart.service';
+ 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './favorites.component.html',
-  styleUrl: './favorites.component.css'
+  imports: [CommonModule, RouterLink],
+  templateUrl:'./favorites.component.html',
+  styleUrl: './favorites.component.css',
 })
 export class FavoritesComponent implements OnInit {
-  favorites: any[] = [];
-  isLoggedIn: boolean = false;
-  isLoading: boolean = true;
+  favorites: FavoriteItem[] = [];
+  favoritesCount: number = 0;
 
-  constructor(
-    public favoritesService: FavoritesService,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private favoritesService: FavoritesService, private router: Router,private cartService: CartService) {}
 
   ngOnInit() {
-    // التحقق من تسجيل الدخول
-    this.authService.isLoggedIn$.subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn;
-      
-      if (loggedIn) {
-        // تحميل المفضلات
-        this.favoritesService.favorites$.subscribe(favs => {
-          this.favorites = favs;
-          this.isLoading = false;
-        });
-      } else {
-        this.isLoading = false;
-      }
+    this.loadFavorites();
+  }
+
+  loadFavorites() {
+    this.favoritesService.favorites$.subscribe(items => {
+      this.favorites = items;
+      this.favoritesCount = items.length;
     });
   }
 
-  removeFromFavorites(product: any, event: Event) {
-    event.stopPropagation();
-    this.favoritesService.removeFromFavorites(product.id);
+  removeItem(productId: number) {
+    if (confirm('Are you sure you want to remove this item?')) {
+      this.favoritesService.removeFromFavorites(productId);
+    }
   }
 
-  goToLogin() {
-    this.router.navigate(['/login'], { 
-      queryParams: { returnUrl: '/favorites' } 
-    });
+  clearAll() {
+    if (confirm('Are you sure you want to clear all favorites?')) {
+      this.favoritesService.clearFavorites();
+    }
   }
 
-  goToProducts() {
-    this.router.navigate(['/products']);
-  }
+addToCart(item: FavoriteItem) {
+  this.cartService.addToCart(item);
+  this.router.navigate(['/cart']);
+}
 
-  viewProduct(product: any) {
-    this.router.navigate(['/product', product.id]);
-  }
 }

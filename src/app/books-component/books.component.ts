@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule  } from '@angular/router';
+import { FavoritesService } from '../services/favorites.service';
 
 interface Category {
   id: string;
@@ -26,7 +27,7 @@ interface Product {
 @Component({
   selector: 'app-books-component',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './books.component.html',
   styleUrl: './books.component.css'
 })
@@ -36,7 +37,9 @@ export class BooksComponentComponent implements OnInit {
   showMoreCategories: boolean = false;
   totalItems: number = 1000;
   isDropdownOpen: boolean = false;
-    // المنتجات اللي هتظهر في الصفحة الحالية
+  searchQuery: string = '';
+  filteredProducts: Product[] = [];
+  
   products: Product[] = [];
   
   // Pagination
@@ -45,8 +48,12 @@ export class BooksComponentComponent implements OnInit {
   totalPages: number = 3;
   pages: number[] = [];
 
-  // ============ Pagination Properties ============
+  constructor(
+    private favoritesService: FavoritesService,
+    private router: Router
+  ) {}
 
+  // ============ Sort Options ============
   sortOptions = [
     { value: 'relevancy', label: 'Relevancy' },
     { value: 'price-low', label: 'Lowest Price' },
@@ -141,27 +148,27 @@ export class BooksComponentComponent implements OnInit {
       name: 'Reference Books',
       image: 'https://i.etsystatic.com/5376867/r/il/10deb8/2811157230/il_300x300.2811157230_pldo.jpg'
     },
-        {
+    {
       id: 'biographies',
       name: 'Biographies & Autobiographies',
       image: 'https://i.etsystatic.com/5909219/r/il/841046/4024786572/il_300x300.4024786572_94g5.jpg'
     },
-        {
+    {
       id: 'poetry',
       name: 'Poetry Books',
       image: 'https://i.etsystatic.com/5683970/r/il/90bab8/1314237912/il_300x300.1314237912_acbf.jpg'
     },
-        {
+    {
       id: 'fitness',
       name: 'Health & Fitness Books',
       image: 'https://i.etsystatic.com/5411407/r/il/6417fe/5616883722/il_300x300.5616883722_4vo4.jpg'
     },
-        {
+    {
       id: 'humor',
       name: 'Humor Books',
       image: 'https://i.etsystatic.com/11855151/r/il/3fd999/7394454280/il_300x300.7394454280_he6v.jpg'
     },
-        {
+    {
       id: 'craft',
       name: 'Craft & Hobby Books',
       image: 'https://i.etsystatic.com/5271402/r/il/c525ed/1400534722/il_300x300.1400534722_7red.jpg'
@@ -281,257 +288,57 @@ export class BooksComponentComponent implements OnInit {
       freeShipping: false,
       adBySeller: true
     },
-    {
-      id: 9,
-      title: 'Leather Wallet with RFID Protection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 10,
-      title: 'Handcrafted Silk Scarf',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 11,
-      title: 'Vintage Sunglasses Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 12,
-      title: 'Premium Leather Belt',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 13,
-      title: 'Wool Winter Hat',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 14,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 15,
-      title: 'Cashmere Gloves',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 16,
-      title: 'Umbrella Set - Rain Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-        {
-      id: 17,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 18,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 19,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 20,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-        {
-      id: 21,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-        {
-      id: 22,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-        {
-      id: 23,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    {
-      id: 2,
-      title: 'Designer Watch Collection',
-      price: 19.50,
-      originalPrice: 27.86,
-      discount: 30,
-      rating: 5,
-      reviews: 945,
-      image: 'assets/images/product7.jpg',
-      seller: 'ModernMetals',
-      isStarSeller: false,
-      freeShipping: false,
-      adBySeller: true
-    },
-    
+    // باقي المنتجات...
   ];
 
-
   ngOnInit(): void {
+    this.filteredProducts = [...this.allProducts];
     this.calculateTotalPages();
     this.loadProducts();
   }
 
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const dropdown = target.closest('.sort-container');
+    if (!dropdown) {
+      this.isDropdownOpen = false;
+    }
+  }
+
+  toggleDropdown(event: Event): void {
+    event.stopPropagation();
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  selectSort(value: string, event: Event): void {
+    event.stopPropagation();
+    this.sortBy = value;
+    this.isDropdownOpen = false;
+    this.onSortChange(value);
+  }
+
+  getSortLabel(): string {
+    const opt = this.sortOptions.find(o => o.value === this.sortBy);
+    return opt ? opt.label : 'Relevancy';
+  }
+
   calculateTotalPages(): void {
-    this.totalPages = Math.ceil(this.allProducts.length / this.itemsPerPage);
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.itemsPerPage);
     this.pages = Array.from({length: this.totalPages}, (_, i) => i + 1);
   }
 
   loadProducts(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    this.products = this.allProducts.slice(startIndex, endIndex);
-    
-    // Scroll to top عند تغيير الصفحة
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.products = this.filteredProducts.slice(startIndex, endIndex);
   }
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       this.loadProducts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
@@ -539,6 +346,7 @@ export class BooksComponentComponent implements OnInit {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.loadProducts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
@@ -546,6 +354,7 @@ export class BooksComponentComponent implements OnInit {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.loadProducts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
@@ -555,23 +364,70 @@ export class BooksComponentComponent implements OnInit {
 
   onSortChange(sortValue: string): void {
     this.sortBy = sortValue;
-    this.sortProducts(sortValue);
-  }
-
-  sortProducts(sortBy: string): void {
-    switch(sortBy) {
+    switch(sortValue) {
       case 'price-low':
-        this.allProducts.sort((a, b) => a.price - b.price);
+        this.filteredProducts.sort((a, b) => a.price - b.price);
         break;
       case 'price-high':
-        this.allProducts.sort((a, b) => b.price - a.price);
+        this.filteredProducts.sort((a, b) => b.price - a.price);
         break;
       case 'reviews':
-        this.allProducts.sort((a, b) => b.reviews - a.reviews);
+        this.filteredProducts.sort((a, b) => b.reviews - a.reviews);
+        break;
+      case 'newest':
+        this.filteredProducts.sort((a, b) => b.id - a.id);
         break;
       default:
+        this.filteredProducts = [...this.allProducts];
         break;
     }
+    this.currentPage = 1;
+    this.calculateTotalPages();
+    this.loadProducts();
+  }
+
+  addToFavorites(product: Product, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const added = this.favoritesService.addToFavorites(product);
+    
+    if (!added) {
+      this.favoritesService.removeFromFavorites(product.id);
+    }
+  }
+
+  isFavorite(productId: number): boolean {
+    return this.favoritesService.isFavorite(productId);
+  }
+
+  goToFavorites(): void {
+    this.router.navigate(['/favorites']);
+  }
+
+  // ✅ الدالة الصح للسيرش
+  onSearchChange(): void {
+    const query = this.searchQuery.toLowerCase().trim();
+    
+    if (query) {
+      this.filteredProducts = this.allProducts.filter(product => 
+        product.title.toLowerCase().includes(query) ||
+        product.seller.toLowerCase().includes(query)
+      );
+    } else {
+      this.filteredProducts = [...this.allProducts];
+    }
+    
+    this.currentPage = 1;
+    this.calculateTotalPages();
+    this.loadProducts();
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.filteredProducts = [...this.allProducts];
+    this.currentPage = 1;
+    this.calculateTotalPages();
     this.loadProducts();
   }
 }

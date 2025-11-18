@@ -1,9 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FavoritesService, Product } from '../services/favorites.service';
+import { FavoritesService } from '../services/favorites.service';
 import { CartService } from '../services/cart.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  originalPrice?: number;
+  discount?: number;
+  rating: number;
+  reviews: number;
+  image: string;
+  seller?: string;
+  shopName:string;
+  fastShipping:boolean,
+  isStarSeller?: boolean;
+  freeShipping?: boolean;
+  adBySeller?: boolean;
+}
 
 @Component({
   selector: 'app-product-details',

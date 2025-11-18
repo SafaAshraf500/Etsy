@@ -8,14 +8,15 @@
   <!-- Categories Section -->
   <section class="categories-section">
     <div class="categories-grid">
-      <div class="category-card" *ngFor="let category of categories.slice(0, showMoreCategories ? categories.length : 6)">
+      <div class="category-card"
+        *ngFor="let category of categories.slice(0, showMoreCategories ? categories.length : 6)">
         <div class="category-image">
           <img [src]="category.image" [alt]="category.name">
         </div>
         <h3 class="category-name">{{ category.name }}</h3>
       </div>
     </div>
-    
+
     <button class="show-more-btn" (click)="toggleCategories()" *ngIf="categories.length > 6">
       {{ showMoreCategories ? 'Show less' : 'Show more (16)' }}
     </button>
@@ -25,41 +26,79 @@
   <section class="products-section">
     <!-- Filters Bar -->
     <div class="filters-bar">
-      <button class="all-filters-btn">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <!-- Search Box -->
+      <div class="search-container"  #dropdown>
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
         </svg>
-        All Filters
-      </button>
-
-      <div class="filters-right">
-        <span class="items-count">{{ totalItems }}+ items with ads</span>
-        <div class="sort-dropdown">
-          <label for="sort">Sort by:</label>
-          <select id="sort" [(ngModel)]="sortBy" (change)="onSortChange(sortBy)">
-            <option value="relevancy">Relevancy</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-            <option value="reviews">Top Customer Reviews</option>
-            <option value="newest">Newest</option>
-          </select>
-        </div>
+        <input type="text" class="search-input" placeholder="Search products..." [(ngModel)]="searchQuery"
+          (input)="onSearchChange()">
+        <button class="clear-btn" *ngIf="searchQuery" (click)="clearSearch()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
-    </div>
+
+<!-- Sort Dropdown -->
+<div class="sort-container" #dropdown>
+  <div class="sort-dropdown" (click)="toggleDropdown($event)">
+    <span class="sort-label">Sort by:</span>
+    <span class="sort-value">{{ getSortLabel() }}</span>
+    <svg class="dropdown-arrow" 
+         [class.rotated]="isDropdownOpen" 
+         width="12" 
+         height="12" 
+         viewBox="0 0 12 12"
+         fill="none" 
+         stroke="currentColor">
+      <path d="M2 4l4 4 4-4" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </div>
+
+  <!-- ✅ استخدم *ngIf عشان تخفي القائمة تماماً -->
+  <div class="dropdown-menu" *ngIf="isDropdownOpen">
+    <button *ngFor="let option of sortOptions" 
+            class="dropdown-item" 
+            [class.selected]="sortBy === option.value"
+            (click)="selectSort(option.value, $event)">
+      <span>{{ option.label }}</span>
+      <svg *ngIf="sortBy === option.value" 
+           width="16" 
+           height="16" 
+           viewBox="0 0 24 24" 
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>
+</div>
 
     <!-- Products Grid -->
     <div class="products-grid">
       <div class="product-card" *ngFor="let product of products">
         <!-- Product Image -->
         <div class="product-image">
-           <a [routerLink]="['/productdetails', product.id]">
-          <img [src]="product.image" [alt]="product.title">
-          <button class="favorite-btn" aria-label="Add to favorites">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M10 17.5l-1.45-1.32C4.4 12.36 2 10.28 2 7.5 2 5.5 3.5 4 5.5 4c1.54 0 3.04.99 3.57 2.36h1.87C11.46 4.99 12.96 4 14.5 4c2 0 3.5 1.5 3.5 3.5 0 2.78-2.4 4.86-6.55 8.68L10 17.5z" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-          </button>
+          <a [routerLink]="['/productdetails', product.id]">
+            <img [src]="product.image" [alt]="product.title">
           </a>
+
+          <button class="favorite-btn" [class.is-favorite]="isFavorite(product.id)"
+            (click)="addToFavorites(product, $event)" aria-label="Add to favorites">
+
+            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+
+          </button>
+
         </div>
 
         <!-- Product Info -->
@@ -69,16 +108,18 @@
 
           <div class="product-rating">
             <div class="stars">
-              <svg *ngFor="let star of [1,2,3,4,5]" width="12" height="12" viewBox="0 0 12 12" 
-                   [class.filled]="star <= product.rating">
-                <path d="M6 0l1.545 4.755h5.005l-4.05 2.945 1.545 4.755L6 9.51 2.955 12.455l1.545-4.755-4.05-2.945h5.005z" 
-                      fill="currentColor"/>
+              <svg *ngFor="let star of [1,2,3,4,5]" width="12" height="12" viewBox="0 0 12 12"
+                [class.filled]="star <= product.rating">
+                <path
+                  d="M6 0l1.545 4.755h5.005l-4.05 2.945 1.545 4.755L6 9.51 2.955 12.455l1.545-4.755-4.05-2.945h5.005z"
+                  fill="currentColor" />
               </svg>
             </div>
             <span class="rating-count">({{ product.reviews | number }})</span>
             <span class="star-seller" *ngIf="product.isStarSeller">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="#FFC107">
-                <path d="M7 0l1.545 4.755h5.005l-4.05 2.945 1.545 4.755L7 9.51 2.955 12.455l1.545-4.755-4.05-2.945h5.005z"/>
+                <path
+                  d="M7 0l1.545 4.755h5.005l-4.05 2.945 1.545 4.755L7 9.51 2.955 12.455l1.545-4.755-4.05-2.945h5.005z" />
               </svg>
               Star Seller
             </span>
@@ -100,41 +141,45 @@
       </div>
     </div>
 
-    <div class="pagination-title">
-  There's so much more for you to discover
-</div>
-    <!-- Pagination - تحت المنتجات على الشمال -->
-<div class="pagination-bottom">
-  <div class="pagination">
+    <!-- No Results Message -->
+    <div class="no-results" *ngIf="products.length === 0">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="11" cy="11" r="8" />
+        <path d="M21 21l-4.35-4.35" />
+      </svg>
+      <h3>No products found</h3>
+      <p>Try adjusting your search or filters</p>
+      <button class="clear-filters-btn" (click)="clearSearch()">Clear search</button>
+    </div>
 
-    <button 
-      class="page-btn arrow-btn" 
-      [disabled]="currentPage === 1"
-      (click)="previousPage()"
-      aria-label="Previous page">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    
-    <!-- الأرقام -->
-    <button 
-      *ngFor="let page of pages"
-      class="page-btn" 
-      [class.active]="page === currentPage"
-      (click)="goToPage(page)">
-      {{ page }}
-    </button>
-    
-    <!-- السهم اليمين (Next) -->
-    <button 
-      class="page-btn arrow-btn" 
-      [disabled]="currentPage === totalPages"
-      (click)="nextPage()"
-      aria-label="Next page">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-  </div>
+    <div class="pagination-title" *ngIf="products.length > 0">
+      There's so much more for you to discover
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-bottom" *ngIf="products.length > 0">
+      <div class="pagination">
+        <button class="page-btn arrow-btn" [disabled]="currentPage === 1" (click)="previousPage()"
+          aria-label="Previous page">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+
+        <button class="page-btn arrow-btn" [disabled]="currentPage === totalPages" (click)="nextPage()"
+          aria-label="Next page">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
 </div>
